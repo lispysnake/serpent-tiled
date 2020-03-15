@@ -1,0 +1,25 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/serpent-tiled
+serpent-tiled.so
+serpent-tiled.dylib
+serpent-tiled.dll
+serpent-tiled.a
+serpent-tiled.lib
+serpent-tiled-test-*
+*.exe
+*.o
+*.obj
+*.lst
+dub.selections.json
+
+# Linux specific
+libserpent-tiled.a
+
+# Caused by autoformat
+*.d.orig
+prepare-shaders
+/built/
+/bin/
