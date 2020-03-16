@@ -20,6 +20,3 @@ libserpent-tiled.a
 
 # Caused by autoformat
 *.d.orig
-prepare-shaders
-/built/
-/bin/
