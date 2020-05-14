@@ -195,7 +195,7 @@ public:
                     }
 
                     qb.drawTexturedQuad(encoder, t2.texture, transformPosition,
-                            transformScale, tileWidth, tileHeight, uv);
+                            transformScale, tileWidth, tileHeight, uv, t2.texture.rgba);
                     drawX += mapComponent.map.tileWidth;
                 }
                 drawY += mapComponent.map.tileHeight;
