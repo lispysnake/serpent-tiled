@@ -64,6 +64,8 @@ private:
     uint _height;
     string _id = "";
     string _name = "";
+    int _xoffset = 0;
+    int _yoffset = 0;
 
 package:
 
@@ -148,6 +150,38 @@ public:
     pure @property final const uint height() @safe @nogc nothrow
     {
         return _height;
+    }
+
+    /**
+     * Return the X-Offset used for this layer
+     */
+    pure @property final const int offsetX() @safe @nogc nothrow
+    {
+        return _xoffset;
+    }
+
+    /**
+     * Set the X-Offset used for this layer
+     */
+    pure @property final void offsetX(int x) @safe @nogc nothrow
+    {
+        _xoffset = x;
+    }
+
+    /**
+     * Return the Y-Offset used for this layer
+     */
+    pure @property final const int offsetY() @safe @nogc nothrow
+    {
+        return _yoffset;
+    }
+
+    /**
+     * Set the Y-offset used for this layer
+     */
+    pure @property final void offsetY(int y) @safe @nogc nothrow
+    {
+        _yoffset = y;
     }
 
     /**

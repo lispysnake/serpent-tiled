@@ -150,7 +150,7 @@ private:
      * Handle each layer in the map, assigning a MapLayer instance to the
      * map.layers array.
      */
-    static final void parseLayer(Map map, Element e) @safe
+    static final void parseLayer(Map map, Element e) @trusted
     {
         auto layer = new MapLayer();
         auto encoding = LayerEncoding.XML;
@@ -171,6 +171,12 @@ private:
                 break;
             case "height":
                 layer.height = to!int(attrValue);
+                break;
+            case "offsetx":
+                layer.offsetX = to!int(attrValue);
+                break;
+            case "offsety":
+                layer.offsetY = to!int(attrValue);
                 break;
             default:
                 break;
