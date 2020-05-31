@@ -76,6 +76,15 @@ public:
 
 private:
 
+    /**
+     * Perform the actual drawing.
+     *
+     * For every X/Y in the layer data, we traverse X-long and then increment
+     * Y.
+     *
+     * Visually each X is 1/2 tile width across, 1/2 tile height down.
+     * Each new Y begins 1/2 tile width back, 1 tile height down
+     */
     final void drawMap(View!ReadOnly queryView, ref QuadBatch batch, EntityID id)
     {
 
