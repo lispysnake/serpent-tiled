@@ -25,4 +25,5 @@
  */
 module serpent.tiled.renderer;
 
+public import serpent.tiled.renderer.isometric;
 public import serpent.tiled.renderer.orthogonal;
