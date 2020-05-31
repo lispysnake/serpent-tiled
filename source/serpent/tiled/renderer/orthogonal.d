@@ -46,7 +46,7 @@ public alias MapRenderer = OrthogonalMapRenderer;
  * is very little point in wasting CPU time submitting invisible
  * quads.
  */
-final struct MapOffsets
+static final struct MapOffsets
 {
     float startX = 0;
     float startY = 0;
