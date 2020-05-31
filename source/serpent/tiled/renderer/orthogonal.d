@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.tiled.renderer;
+module serpent.tiled.renderer.orthogonal;
 
 import serpent.tiled.component;
 
@@ -33,6 +33,12 @@ import serpent.graphics.batch;
 
 import serpent.graphics.renderer;
 import serpent.core.transform;
+
+/**
+ * For backwards compatability, ensure the default 'MapRenderer' is
+ * the orthogonal renderer
+ */
+public alias MapRenderer = OrthogonalMapRenderer;
 
 /**
  * The MapOffsets lets us calculate exactly which part of the tilemap
@@ -53,13 +59,10 @@ final struct MapOffsets
 };
 
 /**
- * MapRenderer walks through a tilemap and dispatches relevant drawing
- * of quads through Sprite APIs.
- *
- * TODO: Split renderer to work on MapLayer entities. This will massively
- * improve approach to layering sprites.
+ * The OrthographicMapRenderer will only attempt to render any MapComponent
+ * with an orthographic orientation.
  */
-final class MapRenderer : Renderer
+final class OrthogonalMapRenderer : Renderer
 {
 
 public:
@@ -74,7 +77,10 @@ public:
         foreach (entity, transform, map; queryView.withComponents!(TransformComponent,
                 MapComponent))
         {
-            packet.pushVisibleEntity(entity.id, this, transform.position);
+            if (map.map.orientation == MapOrientation.Orthogonal)
+            {
+                packet.pushVisibleEntity(entity.id, this, transform.position);
+            }
         }
     }
 
