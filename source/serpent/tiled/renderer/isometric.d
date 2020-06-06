@@ -79,15 +79,97 @@ private:
     /**
      * Perform the actual drawing.
      *
-     * For every X/Y in the layer data, we traverse X-long and then increment
-     * Y.
-     *
-     * Visually each X is 1/2 tile width across, 1/2 tile height down.
-     * Each new Y begins 1/2 tile width back, 1 tile height down
+     * Currently this is unoptimised and doesn't perform any clipping
+     * whatsoever. We will spend some time cleaning it up before promoting
+     * its use.
      */
-    final void drawMap(View!ReadOnly queryView, ref QuadBatch batch, EntityID id)
+    final void drawMap(View!ReadOnly queryView, ref QuadBatch qb, EntityID id)
     {
+        auto mapComponent = queryView.data!MapComponent(id);
+        auto transform = queryView.data!TransformComponent(id);
+        auto startX = 0.0f;
+        auto startY = 0.0f;
 
+        auto drawX = startX;
+        auto drawY = startY;
+
+        auto transformScale = vec3f(1.0f, 1.0f, 1.0f);
+
+        float drawZ = transform.position.z;
+
+        const auto heightIncrement = mapComponent.map.tileHeight / 2.0f;
+        const auto widthIncrement = mapComponent.map.tileWidth / 2.0f;
+
+        foreach (layerID; 0 .. mapComponent.map.layers.length)
+        {
+            auto layer = mapComponent.map.layers[layerID];
+
+            drawX = startX;
+            drawY = startY;
+
+            foreach (y; 0 .. layer.height)
+            {
+                foreach (x; 0 .. layer.width)
+                {
+                    auto gid = layer.data[x + y * layer.width];
+                    auto tile = gid & ~TileFlipMode.Mask;
+                    auto tileset = mapComponent.map.findTileSet(tile);
+                    if (tileset is null)
+                    {
+                        drawX += widthIncrement;
+                        drawY += heightIncrement;
+                        continue;
+                    }
+                    auto t2 = tileset.getTile(tile);
+
+                    auto transformPosition = vec3f(drawX + layer.offsetX,
+                            drawY + layer.offsetY, drawZ);
+
+                    float tileWidth = mapComponent.map.tileWidth;
+                    float tileHeight = mapComponent.map.tileHeight;
+
+                    /* Anchor the image correctly. */
+                    if (tileset.collection)
+                    {
+                        tileWidth = t2.texture.width;
+                        tileHeight = t2.texture.height;
+
+                        /* Account for non-regular tiles */
+                        if (tileWidth != mapComponent.map.tileWidth
+                                || tileHeight != mapComponent.map.tileHeight)
+                        {
+                            transformPosition.y += mapComponent.map.tileHeight;
+                            transformPosition.y -= tileHeight;
+                        }
+                    }
+
+                    /* Currently only support horizontal + vertical flip */
+                    UVCoordinates uv = t2.uv;
+                    if ((gid & TileFlipMode.Horizontal) == TileFlipMode.Horizontal)
+                    {
+                        uv.flipHorizontal();
+                    }
+                    if ((gid & TileFlipMode.Vertical) == TileFlipMode.Vertical)
+                    {
+                        uv.flipVertical();
+                    }
+
+                    qb.drawTexturedQuad(encoder, t2.texture, transformPosition,
+                            transformScale, tileWidth, tileHeight, uv, t2.texture.rgba);
+
+                    /* Increment draw index */
+                    drawX += widthIncrement;
+                    drawY += heightIncrement;
+                    drawZ += 0.1f;
+                }
+
+                auto yOffset = y * heightIncrement;
+                auto xOffset = y * widthIncrement;
+
+                drawX = startX - xOffset;
+                drawY = startY + yOffset;
+            }
+        }
     }
 
 }
