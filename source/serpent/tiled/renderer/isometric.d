@@ -24,9 +24,9 @@ module serpent.tiled.renderer.isometric;
 
 import serpent.tiled.component;
 
-public import serpent.core.entity;
+public import serpent.ecs.entity;
 public import serpent.core.processor;
-public import serpent.core.view;
+public import serpent.ecs.view;
 
 import serpent.tiled : TileFlipMode;
 import serpent.graphics.batch;

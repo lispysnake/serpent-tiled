@@ -22,7 +22,7 @@
 
 module serpent.tiled.component;
 
-public import serpent.core.component : serpentComponent;
+public import serpent.ecs.component : serpentComponent;
 public import serpent.tiled.map;
 
 /* HAX */
